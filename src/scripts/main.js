@@ -3,24 +3,30 @@
 function listShowToggle() {
   const tree = document.querySelector('.tree');
 
-  const liArray = tree.querySelectorAll('.tree li');
-
-  for (const li of liArray) {
+  for (const li of tree.querySelectorAll('li')) {
     const childUl = li.querySelector('ul');
 
     if (childUl) {
-      const span = document.createElement('span');
+      const firstNode = li.childNodes[0];
 
-      const text = li.firstChild;
+      // Check if first node is a non-empty text node
+      if (
+        firstNode?.nodeType === Node.TEXT_NODE &&
+        firstNode.textContent.trim() !== ''
+      ) {
+        const span = document.createElement('span');
 
-      span.textContent = text.textContent;
+        span.textContent = firstNode.textContent.trim();
 
-      li.insertBefore(span, text);
-      li.removeChild(text);
+        li.insertBefore(span, firstNode);
+        li.removeChild(firstNode);
 
-      span.addEventListener('click', () => {
-        childUl.hidden = !childUl.hidden;
-      });
+        span.style.cursor = 'pointer';
+
+        span.addEventListener('click', () => {
+          childUl.hidden = !childUl.hidden;
+        });
+      }
     }
   }
 }
